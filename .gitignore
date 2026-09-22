@@ -1,3 +1,5 @@
 parser/node_modules/
+parser/dist/
 bot/bot_venv/
 projects.html
+.env
