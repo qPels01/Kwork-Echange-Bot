@@ -1,6 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { type Project } from "./filter.js";
+import { cacheOrders } from "./utils/cacher.js";
 
 export const parseKwork = async (): Promise<Project[]> => {
     try {
@@ -27,10 +28,11 @@ export const parseKwork = async (): Promise<Project[]> => {
             }
             // console.log(projects.length);
         }
+        await cacheOrders(projects.map((project) => project.id));
         return projects;
     } catch (e) {
         console.error(e);
         return [];
     }
 };
-// await parseKwork();
+await parseKwork();
