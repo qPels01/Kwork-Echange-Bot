@@ -1,35 +1,36 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+import { type Project } from "./filter.js";
 
-export const parseKwork = async () => {
+export const parseKwork = async (): Promise<Project[]> => {
     try {
-        const response = await axios.get("https://kwork.ru/projects");
-        const $ = cheerio.load(response.data);
+        const responses: any[] = await Promise.all([
+            axios.get("https://kwork.ru/projects?c=41"),
+            axios.get("https://kwork.ru/projects?c=37"),
+        ]);
 
-        let projectsPrompt = "";
+        let projects: Project[] = [];
 
-        const script = $("script").eq(11).html();
+        for (const response of responses) {
+            const $ = cheerio.load(response.data);
 
-        if (script && script.includes("wantsListData")) {
-            const match = script.match(/window\.stateData=(\{.*?\});window\.firebaseConfig/s);
+            const script = $("script").eq(11).html();
 
-            if (match) {
-                const stateData = JSON?.parse(match[1]!);
-                // console.log(stateData.wantsListData.pagination.data);
-                const projects = stateData.wantsListData.pagination.data;
+            if (script && script.includes("wantsListData")) {
+                const match = script.match(/window\.stateData=(\{.*?\});window\.firebaseConfig/s);
 
-                for (const project of projects) {
-                    projectsPrompt += `\n ID проекта: ${project.id}\n Название: ${project.name}\n Описание: ${project.description}\n Статус: ${project.status}\n Цена от: ${project.priceLimit}₽\n Лимит времени (в днях): ${project.max_days}\n Ссылка на подробное описание: https://kwork.ru/projects/${project.id}/view\n Откликов: ${project.getWantsActiveCount}`;
+                if (!match) {
+                    continue;
                 }
-                // console.log(projectsPrompt);
-                return projectsPrompt;
-            } else {
-                console.log("Matches no found");
-                return null;
+                const stateData = JSON?.parse(match[1]!);
+                projects.push(...stateData.wantsListData.pagination.data);
             }
+            // console.log(projects.length);
         }
+        return projects;
     } catch (e) {
         console.error(e);
+        return [];
     }
 };
-await parseKwork();
+// await parseKwork();

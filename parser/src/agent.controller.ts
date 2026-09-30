@@ -22,14 +22,18 @@ const agent = new SocksProxyAgent(
     `socks5://${proxy.username}:${proxy.password}@${proxy.host}:${proxy.port}`,
 );
 
-export const queryLLM = async (prompt: string) => {
+export const queryLLM = async (prompt: string): Promise<string> => {
     try {
         const res = await axios.post(
             "https://openrouter.ai/api/v1/chat/completions",
             {
-                model: "nex-agi/nex-n2.5-pro:free",
+                model: "dots-studio/dots-3-note-preview:free",
                 messages: [
-                    { role: "system", content: "You are a helpful assistant." },
+                    {
+                        role: "system",
+                        content:
+                            "Ты должен фильтровать заказы с фриланс биржы kwork. Это будут заказы на разработку ботов, сайтов и т.д.",
+                    },
                     { role: "user", content: prompt },
                 ],
             },
@@ -42,8 +46,11 @@ export const queryLLM = async (prompt: string) => {
             },
         );
         const reply = res.data.choices[0].message.content;
-        console.log("\ud83e\udd16 Response:", reply);
+        // console.log("\ud83e\udd16 Response:", reply);
+        return reply;
     } catch (error: any) {
         console.error("Error:", error.response?.data || error.message);
+        return "";
     }
 };
+// await queryLLM("ПРивет!!! Как твои дела???");
