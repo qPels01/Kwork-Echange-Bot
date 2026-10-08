@@ -11,7 +11,9 @@
     "scripts": {
         "build": "tsc",
         "start-parser": "node dist/parser.js",
-        "start-agent": "node dist/agent.controller.js"
+        "start-agent": "node dist/agent.controller.js",
+        "start-cacher": "node dist/utils/cacher.js",
+        "start": "node dist/main.js"
     },
     "devDependencies": {
         "ts-node": "^10.9.2"

@@ -1,6 +1,6 @@
 import { queryLLM } from "./agent.controller.js";
 import { parseKwork } from "./parser.js";
-import { filterProject, type Project } from "./filter.js";
+import { filterProject, type Project } from "./utils/filter.js";
 
 const agentWorker = async () => {
     const projects = await parseKwork();
@@ -9,7 +9,7 @@ const agentWorker = async () => {
         if (filterProject(project)) {
             continue;
         }
-        prompt += `\n\n ID проекта: ${project.id}\n Название: ${project.name}\n Описание: ${project.description}\n Статус: ${project.status}\n Цена от: ${project.priceLimit}₽\n Лимит времени (в днях): ${project.max_days}\n Ссылка на подробное описание: https://kwork.ru/projects/${project.id}/view\n Откликов: ${project.getWantsActiveCount}`;
+        prompt += `\n ID проекта: ${project.id}\n Название: ${project.name}\n Описание: ${project.description}\n Статус: ${project.status}\n Цена от: ${project.priceLimit}₽\n Лимит времени (в днях): ${project.max_days}\n Ссылка на подробное описание: https://kwork.ru/projects/${project.id}/view\n Откликов: ${project.getWantsActiveCount}`;
     }
     // console.log(prompt);
     const res = await queryLLM(prompt);
