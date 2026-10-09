@@ -3,3 +3,4 @@ parser/dist/
 bot/bot_venv/
 projects.html
 .env
+parser/data/
