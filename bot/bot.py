@@ -9,7 +9,6 @@ from message_handlers.commands_handler import message_router
 
 load_dotenv()
 
-
 async def main():
     session = AiohttpSession(
         proxy=f"http://{os.getenv("PROXY_USER")}:{os.getenv("PROXY_PASS")}@{os.getenv("PROXY_SERVER")}:{os.getenv("PROXY_PORT")}"
