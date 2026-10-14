@@ -1,6 +1,9 @@
 parser/node_modules/
 parser/dist/
-bot/bot_venv/
+parser/data/
+
+bot/__pycache__/
+bot/.venv/
+
 projects.html
 .env
-parser/data/
